@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Golden Secret Santa — Private Codes</title>
+<style>
+:root{--gold:#d8b66a;--pale:#f2dfad;--muted:#aaa08c;--line:#46391f}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#2b2418 0,#101010 48%,#080808 100%);color:#f7f1e5;font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+main{max-width:720px;margin:auto;padding:24px 16px 52px}.hero{text-align:center;margin:10px 0 24px}.stars{color:var(--gold);letter-spacing:10px;font-size:25px}.eyebrow{color:var(--gold);font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700}.hero h1{font:clamp(38px,8vw,58px)/1.04 Georgia,serif;color:var(--pale);font-weight:500;margin:12px 0}.hero p,.muted{color:var(--muted);font-size:14px}.card{background:linear-gradient(145deg,#1d1b17,#111);border:1px solid var(--line);border-radius:18px;padding:21px;margin:15px 0;box-shadow:0 16px 42px #0007}.card h2{font:26px Georgia,serif;color:var(--pale);margin:0 0 12px}.pill{display:inline-block;border:1px solid var(--line);border-radius:30px;padding:4px 10px;color:var(--pale);font-size:11px;letter-spacing:1px}label{display:block;color:#e8d9b7;font-size:13px;margin:13px 0 6px}input,textarea{width:100%;border:1px solid #51452d;border-radius:10px;background:#0b0b0b;color:white;padding:13px;font:inherit}textarea{min-height:120px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{border:0;border-radius:30px;background:linear-gradient(100deg,#b48b3d,#f0d99b);color:#17120a;font-weight:800;padding:14px 18px;width:100%;margin-top:15px;cursor:pointer}.btn.outline{background:transparent;color:var(--pale);border:1px solid var(--gold)}.btn:disabled{opacity:.45;cursor:not-allowed}.notice{border-left:3px solid var(--gold);padding:11px 13px;background:#d8b66a12;color:#d8ccb0;font-size:13px;border-radius:4px;margin-top:13px}.warning{border-color:#b66c48;background:#9d472015}.rule{display:flex;gap:10px;align-items:flex-start;margin:10px 0;color:#ded4bf;font-size:14px}.divider{height:1px;background:var(--line);margin:18px 0}.footer{text-align:center;color:#756d5d;font-size:12px;margin-top:25px}.hidden{display:none!important}.code{font:700 25px/1.3 ui-monospace,monospace;letter-spacing:4px;color:var(--pale);text-align:center;padding:15px;border:1px dashed var(--gold);border-radius:12px;margin-top:12px}@media(max-width:520px){.grid{grid-template-columns:1fr}.card{padding:18px}}
+</style></head>
+<body><main>
+<header class="hero"><div class="stars">✦ ✧ ✦</div><div class="eyebrow">A little holiday magic</div><h1>Golden<br>Secret Santa</h1><p>One organiser. One private draw. A personal code for every participant.</p></header>
+
+<section class="card">
+<span class="pill">HOW PRIVATE CODES WORK</span><h2>One device is enough</h2>
+<div class="rule">✦ <span>Every participant gets their own unique, private access code.</span></div>
+<div class="rule">✦ <span>Family members can take turns on the same phone, tablet or computer.</span></div>
+<div class="rule">✦ <span>Each code reveals only its owner's recipient—not anyone else's assignment.</span></div>
+<div class="rule">✦ <span>After viewing, tap <b>Hide my result</b> before handing over the device.</span></div>
+<div class="rule">✦ <span>Codes cannot start a new draw or change the locked assignments.</span></div>
+<div class="notice warning">For privacy, participants should enter their code out of sight of others, avoid saving screenshots, and hide the result before passing the device on.</div>
+</section>
+
+<section class="card">
+<span class="pill">PARTICIPANT ACCESS</span><h2>Enter your personal code</h2>
+<p class="muted">Use the unique code sent to you by the organiser. No personal account or separate device is needed.</p>
+<label for="code">Your private access code</label><input id="code" autocomplete="off" autocapitalize="characters" placeholder="e.g. K7P4-M9Q2">
+<button class="btn" onclick="reveal()">Reveal my recipient</button>
+<div id="msg" class="notice">Private code lookup becomes active when the secure backend is connected.</div>
+<div id="result" class="hidden"><div class="divider"></div><div class="eyebrow" style="text-align:center">You are buying a gift for</div><div class="code" id="recipient">PRIVATE RESULT</div><button class="btn outline" onclick="hideResult()">Hide my result</button><p class="muted" style="text-align:center">Please hide this result before handing the device to someone else.</p></div>
+</section>
+
+<section class="card">
+<span class="pill">ORGANISER ONLY</span><h2>Exchange setup</h2>
+<label for="event">Exchange name</label><input id="event" value="The Christmas Secret Santa">
+<div class="grid"><div><label for="budget">Gift budget</label><input id="budget" placeholder="e.g. TT$150"></div><div><label for="date">Exchange date</label><input id="date" type="date"></div></div>
+<label for="names">Participant names — one per line</label><textarea id="names" placeholder="Alex&#10;Jordan&#10;Taylor&#10;Morgan"></textarea>
+<button class="btn" onclick="checkList()">Check participant list</button>
+<div id="organiserMsg" class="notice">The secure organiser draw, code generation and permanent lock must be connected on the server before this can be used for a real exchange.</div>
+</section>
+<div class="footer">✦ KEEP IT SECRET. KEEP IT THOUGHTFUL. ✦<br>Golden Secret Santa · Private individual codes</div>
+</main>
+<script>
+function reveal(){
+ const code=document.getElementById('code').value.trim();
+ const m=document.getElementById('msg');
+ document.getElementById('result').classList.add('hidden');
+ if(!code){m.textContent='Please enter the private code sent to you.';return}
+ m.textContent='The private code service is not connected yet. No assignment has been revealed.';
+}
+function hideResult(){
+ document.getElementById('result').classList.add('hidden');
+ document.getElementById('code').value='';
+ document.getElementById('msg').textContent='Your result is hidden. The next participant can enter their own code.';
+}
+function checkList(){
+ const names=document.getElementById('names').value.split('\n').map(n=>n.trim()).filter(Boolean);
+ const m=document.getElementById('organiserMsg');
+ if(names.length<3){m.textContent='Please add at least three participants.';return}
+ if(new Set(names.map(n=>n.toLowerCase())).size!==names.length){m.textContent='Duplicate names found. Please correct the list.';return}
+ m.textContent=names.length+' participants entered. No draw has been made. Secure server setup is still required.';
+}
+</script></body></html>
